@@ -6,5 +6,5 @@ import retrofit2.http.GET
 
 interface ApiEndpoint {
     @GET("get-news")
-    fun getNews():Call<List<NewsModel>>
+    fun getNews():Call<NewsModel>
 }

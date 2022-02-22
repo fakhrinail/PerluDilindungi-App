@@ -21,6 +21,8 @@ data class Description (val __cdata: String)
 
 data class Enclosure (val _url: String, val _length: String, val _type: String)
 
-data class NewsModel (val title: String, val link: List<String>,
-                      val guid: String, val pubDate: String,
-                      val description: Description, val enclosure: Enclosure)
+data class Results (val title: String, val link: List<String>,
+                    val guid: String, val pubDate: String,
+                    val description: Description, val enclosure: Enclosure)
+
+data class NewsModel (val success: Boolean, val message: String, val count_total: Int, val results: List<Results>)
