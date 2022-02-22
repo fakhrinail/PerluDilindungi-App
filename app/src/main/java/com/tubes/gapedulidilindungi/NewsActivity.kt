@@ -26,7 +26,7 @@ class NewsActivity : AppCompatActivity() {
             endpoint.getNews()
                 .enqueue(object : Callback<NewsModel> {
                     override fun onFailure(call: Call<NewsModel>, t: Throwable) {
-                        printLog( t.toString() )
+                        printLog( ">>> onFailure <<< : $t")
                     }
                     override fun onResponse(
                         call: Call<NewsModel>,
