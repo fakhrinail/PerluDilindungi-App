@@ -12,6 +12,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GapeduliDilindungi">
         <activity
+            android:name=".NewsActivity"
+            android:label="News"></activity>
+        <activity
             android:name=".HomeActivity"
             android:label="Home"></activity>
         <activity
