@@ -33,7 +33,7 @@ class NewsActivity : AppCompatActivity() {
                         response: Response<NewsModel>
                     ) {
                         if (response.isSuccessful) {
-                            printLog( response.body().toString() )
+                            showData( response.body()!! )
                         }
                     }
                 })
@@ -42,6 +42,13 @@ class NewsActivity : AppCompatActivity() {
 
     private fun printLog(message: String) {
         Log.d(TAG, message)
+    }
+
+    private fun showData (data: NewsModel) {
+        val results = data.results
+        for (result in results) {
+            printLog("title: ${result.title}")
+        }
     }
 
 }
