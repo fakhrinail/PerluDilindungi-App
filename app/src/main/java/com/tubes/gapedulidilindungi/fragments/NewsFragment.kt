@@ -1,25 +1,34 @@
-package com.tubes.gapedulidilindungi
+package com.tubes.gapedulidilindungi.fragments
 
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import androidx.fragment.app.Fragment
+import android.view.LayoutInflater
 import android.view.View
+import android.view.ViewGroup
+import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.tubes.gapedulidilindungi.*
 import com.tubes.gapedulidilindungi.retrofit.ApiService
-import kotlinx.android.synthetic.main.activity_news.*
+import kotlinx.android.synthetic.main.fragment_news.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class NewsActivity : AppCompatActivity() {
+class NewsFragment : Fragment() {
     private val TAG: String = "NewsActivity"
 
     lateinit var newsAdapter: NewsAdapter
 
+    override fun onCreateView(
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return inflater.inflate(R.layout.fragment_news, container, false)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_news)
     }
 
     override fun onStart() {
@@ -31,14 +40,21 @@ class NewsActivity : AppCompatActivity() {
     private fun setupRecyclerView() {
         newsAdapter = NewsAdapter(arrayListOf(), object : NewsAdapter.OnAdapterListener {
             override fun onClick(result: NewsModel.Results) {
-                val intent = Intent(this@NewsActivity, NewsDetailsActivity::class.java)
-                    .putExtra("news_url", result.link[0])
-                startActivity(intent)
+                val newsDetailsFragment = NewsDetailsFragment()
+                val bundle = Bundle()
+                bundle.putString("news_url", result.link[0])
+                newsDetailsFragment.arguments = bundle
+
+                if (newsDetailsFragment != null) {
+                    val transaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+                    transaction.replace(R.id.fragment_container, newsDetailsFragment)
+                    transaction.commit()
+                }
             }
 
         })
         recyclerViewNews__newsList.apply {
-            layoutManager = LinearLayoutManager(applicationContext)
+            layoutManager = LinearLayoutManager(context)
             adapter = newsAdapter
         }
     }
