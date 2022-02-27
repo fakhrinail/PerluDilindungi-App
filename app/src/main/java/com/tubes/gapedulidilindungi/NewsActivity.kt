@@ -1,5 +1,6 @@
 package com.tubes.gapedulidilindungi
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
@@ -28,7 +29,14 @@ class NewsActivity : AppCompatActivity() {
     }
 
     private fun setupRecyclerView() {
-        newsAdapter = NewsAdapter(arrayListOf())
+        newsAdapter = NewsAdapter(arrayListOf(), object : NewsAdapter.OnAdapterListener {
+            override fun onClick(result: NewsModel.Results) {
+                val intent = Intent(this@NewsActivity, NewsDetailsActivity::class.java)
+                    .putExtra("news_url", result.link[0])
+                startActivity(intent)
+            }
+
+        })
         recyclerViewNews__newsList.apply {
             layoutManager = LinearLayoutManager(applicationContext)
             adapter = newsAdapter
