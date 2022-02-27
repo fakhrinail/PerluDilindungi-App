@@ -1,6 +1,7 @@
 package com.tubes.gapedulidilindungi
 
 import java.util.*
+import kotlin.collections.ArrayList
 
 //"title": "Situasi COVID-19 di Indonesia (Update per 12 Februari 2022)",
 //"link": [
@@ -21,8 +22,9 @@ data class Description (val __cdata: String)
 
 data class Enclosure (val _url: String, val _length: String, val _type: String)
 
-data class Results (val title: String, val link: List<String>,
-                    val guid: String, val pubDate: String,
-                    val description: Description, val enclosure: Enclosure)
+data class NewsModel (val success: Boolean, val message: String, val count_total: Int, val results: ArrayList<Results>) {
+    data class Results (val title: String, val link: ArrayList<String>,
+                        val guid: String, val pubDate: String,
+                        val description: Description, val enclosure: Enclosure)
 
-data class NewsModel (val success: Boolean, val message: String, val count_total: Int, val results: List<Results>)
+}
