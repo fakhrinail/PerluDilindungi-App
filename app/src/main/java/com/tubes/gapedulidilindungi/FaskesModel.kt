@@ -6,7 +6,7 @@ data class FaskesModel(
     val success: Boolean,
     val message: String,
     val count_total: Int,
-    val results: List<Results>
+    val results: List<FasksesResults>
 )
 
 data class FasksesResults(

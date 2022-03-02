@@ -11,10 +11,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.GapeduliDilindungi">
-        <activity android:name=".NewsDetailsActivity"></activity>
-        <activity
-            android:name=".NewsActivity"
-            android:label="News" />
+        <activity android:name=".SearchActivity"></activity>
         <activity
             android:name=".HomeActivity"
             android:label="Home" />

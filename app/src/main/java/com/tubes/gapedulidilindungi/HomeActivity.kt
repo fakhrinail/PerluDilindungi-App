@@ -4,13 +4,13 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.tubes.gapedulidilindungi.fragments.BookmarkFragment
-import com.tubes.gapedulidilindungi.fragments.LocationFragment
 import com.tubes.gapedulidilindungi.fragments.NewsFragment
+import com.tubes.gapedulidilindungi.fragments.SearchFragment
 import kotlinx.android.synthetic.main.activity_home.*
 
 class HomeActivity : AppCompatActivity() {
     private val newsFragment = NewsFragment()
-    private val locationFragment = LocationFragment()
+    private val searchFragment = SearchFragment()
     private val bookmarkFragment = BookmarkFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +21,7 @@ class HomeActivity : AppCompatActivity() {
         bottomNavbar.setOnNavigationItemSelectedListener {
             when(it.itemId){
                 R.id.icNavbar__news -> replaceFragment(newsFragment)
-                R.id.icNavbar__location -> replaceFragment(locationFragment)
+                R.id.icNavbar__location -> replaceFragment(searchFragment)
                 R.id.icNavbar__bookmark -> replaceFragment(bookmarkFragment)
             }
             true
