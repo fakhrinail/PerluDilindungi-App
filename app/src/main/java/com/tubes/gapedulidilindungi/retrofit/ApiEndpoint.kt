@@ -1,6 +1,7 @@
 package com.tubes.gapedulidilindungi.retrofit
 
 import com.tubes.gapedulidilindungi.FaskesDetail
+import com.tubes.gapedulidilindungi.FaskesModel
 import com.tubes.gapedulidilindungi.NewsModel
 import com.tubes.gapedulidilindungi.ProvinceCityModel
 import retrofit2.Call
@@ -18,5 +19,5 @@ interface ApiEndpoint {
     fun getCities(@Query("start_id") provinceId: String):Call<ProvinceCityModel>
 
     @GET("api/get-faskes-vaksinasi")
-    fun getFaskes(@Query("province") province: String, @Query("city") city: String):Call<FaskesDetail>
+    fun getFaskes(@Query("province") province: String, @Query("city") city: String):Call<FaskesModel>
 }

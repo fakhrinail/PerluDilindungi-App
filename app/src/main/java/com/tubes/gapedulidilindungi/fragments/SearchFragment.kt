@@ -10,6 +10,7 @@ import android.widget.Adapter
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import com.tubes.gapedulidilindungi.FaskesModel
 import com.tubes.gapedulidilindungi.ProvinceCityModel
 import com.tubes.gapedulidilindungi.ProvinceCityResults
 import com.tubes.gapedulidilindungi.R
@@ -35,6 +36,9 @@ class SearchFragment : Fragment() {
     private var _binding: FragmentSearchBinding? = null
     private val binding get() = _binding!!
 
+    private var selectedProvince: String? = null
+    private var selectedCity: String? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
     }
@@ -54,15 +58,32 @@ class SearchFragment : Fragment() {
         binding.dropdownProvince.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
                 val provinceId = parent?.getItemAtPosition(pos).toString()
-                provinceId?.let {
-                    getCitiesDataFromApi(it)
-                }
+                getCitiesDataFromApi(provinceId)
+                selectedProvince = provinceId
             }
 
             override fun onNothingSelected(p0: AdapterView<*>?) {
                 TODO("Not yet implemented")
             }
+        }
 
+        binding.dropdownCity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
+                val cityId = parent?.getItemAtPosition(pos).toString()
+                selectedCity = cityId
+            }
+
+            override fun onNothingSelected(p0: AdapterView<*>?) {
+                TODO("Not yet implemented")
+            }
+        }
+
+        binding.btnSearch.setOnClickListener {
+            if (selectedProvince != null && selectedCity != null) {
+                getFacilitiesDataFromApi(selectedProvince!!, selectedCity!!)
+            } else {
+                Toast.makeText(requireContext(), "Select province and city", Toast.LENGTH_SHORT).show()
+            }
         }
 
         return binding.root
@@ -139,6 +160,36 @@ class SearchFragment : Fragment() {
                             Log.d("CityFail", response.message())
                             Toast.makeText(requireContext(), response.message(), Toast.LENGTH_SHORT)
                                 .show()
+                        }
+                    }
+                })
+        }
+    }
+
+    private fun getFacilitiesDataFromApi(provinceId: String, cityId: String) {
+        binding.progressBarSearchSearchLoading.visibility = View.VISIBLE
+        with(ApiService) {
+            endpoint.getFaskes(provinceId, cityId)
+                .enqueue(object : Callback<FaskesModel> {
+                    override fun onFailure(call: Call<FaskesModel>, t: Throwable) {
+                        binding.progressBarSearchSearchLoading.visibility = View.GONE
+                        Log.d("SearchFragment", ">>> onFailure <<< : $t")
+                    }
+
+                    override fun onResponse(
+                        call: Call<FaskesModel>,
+                        response: Response<FaskesModel>
+                    ) {
+                        binding.progressBarSearchSearchLoading.visibility = View.GONE
+                        if (response.isSuccessful) {
+                            Log.d("SearchFragment", response.body().toString())
+                            // TODO : Integrate with list of facilities fragment
+                        } else {
+                            Toast.makeText(
+                                requireContext(),
+                                "Unable to get facilities",
+                                Toast.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 })
