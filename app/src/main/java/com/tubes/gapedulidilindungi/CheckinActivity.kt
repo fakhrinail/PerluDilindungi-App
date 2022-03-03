@@ -1,19 +1,21 @@
 package com.tubes.gapedulidilindungi
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.content.Context
 import android.content.pm.PackageManager
-import androidx.appcompat.app.AppCompatActivity
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import com.budiyev.android.codescanner.AutoFocusMode
-import com.budiyev.android.codescanner.CodeScanner
-import com.budiyev.android.codescanner.DecodeCallback
-import com.budiyev.android.codescanner.ErrorCallback
-import com.budiyev.android.codescanner.ScanMode
+import com.budiyev.android.codescanner.*
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
 import com.tubes.gapedulidilindungi.models.CheckinRequestModel
@@ -25,22 +27,55 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class CheckinActivity : AppCompatActivity() {
+class CheckinActivity : AppCompatActivity(), SensorEventListener {
     private lateinit var codeScanner: CodeScanner
     private lateinit var fusedLocationClient: FusedLocationProviderClient
+    private lateinit var sensorManager: SensorManager
 
     private var lastLatitude: Double? = null
     private var lastLongitude: Double? = null
+    private var temperatureSensor: Sensor? = null
 
+    private var hasTemperatureSensor: Boolean = false
+
+    @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_checkin)
+
+        sensorManager = getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        temperatureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_AMBIENT_TEMPERATURE)
+        if (temperatureSensor == null) {
+            tv_temperature.text = "Temperature sensor not available in this device"
+        }
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this@CheckinActivity)
 
         setupPermissions()
         getLastKnownLocation()
         codeScanner()
+    }
+
+    override fun onAccuracyChanged(sensor: Sensor, accuracy: Int) {
+        // Do something here if sensor accuracy changes.
+    }
+
+    override fun onSensorChanged(event: SensorEvent) {
+        val currentTemp = event.values[0]
+        tv_temperature.text = currentTemp.toString()
+        // Do something with this sensor data.
+    }
+
+    override fun onResume() {
+        super.onResume()
+        codeScanner.startPreview()
+        sensorManager.registerListener(this, temperatureSensor, SensorManager.SENSOR_DELAY_NORMAL)
+    }
+
+    override fun onPause() {
+        codeScanner.releaseResources()
+        super.onPause()
+        sensorManager.unregisterListener(this)
     }
 
     private fun codeScanner() {
@@ -85,15 +120,6 @@ class CheckinActivity : AppCompatActivity() {
         }
     }
 
-    override fun onResume() {
-        super.onResume()
-        codeScanner.startPreview()
-    }
-
-    override fun onPause() {
-        codeScanner.releaseResources()
-        super.onPause()
-    }
 
     private fun getLastKnownLocation() {
         if (ActivityCompat.checkSelfPermission(
@@ -104,14 +130,8 @@ class CheckinActivity : AppCompatActivity() {
                 Manifest.permission.ACCESS_COARSE_LOCATION
             ) != PackageManager.PERMISSION_GRANTED
         ) {
-            // TODO: Consider calling
-            //    ActivityCompat#requestPermissions
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-            Log.d("Location", "No permission granted")
+            Toast.makeText(this@CheckinActivity, "Permission not granted", Toast.LENGTH_SHORT)
+                .show()
             return
         } else {
             Log.d("Location", "Permission granted")
