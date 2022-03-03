@@ -1,5 +1,6 @@
 package com.tubes.gapedulidilindungi
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -25,6 +26,11 @@ class HomeActivity : AppCompatActivity() {
                 R.id.icNavbar__bookmark -> replaceFragment(bookmarkFragment)
             }
             true
+        }
+
+        btn__qrcodescanner.setOnClickListener {
+            val intent = Intent(this@HomeActivity, CheckinActivity::class.java)
+            startActivity(intent)
         }
     }
 
