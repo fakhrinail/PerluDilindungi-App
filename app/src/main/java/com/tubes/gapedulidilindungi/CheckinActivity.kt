@@ -4,6 +4,8 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -12,7 +14,14 @@ import com.budiyev.android.codescanner.CodeScanner
 import com.budiyev.android.codescanner.DecodeCallback
 import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
+import com.tubes.gapedulidilindungi.models.ProvinceCityModel
+import com.tubes.gapedulidilindungi.retrofit.ApiService
 import kotlinx.android.synthetic.main.activity_checkin.*
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class CheckinActivity : AppCompatActivity() {
     private lateinit var codeScanner: CodeScanner
@@ -45,6 +54,7 @@ class CheckinActivity : AppCompatActivity() {
 
             errorCallback = ErrorCallback {
                 runOnUiThread {
+                    Toast.makeText(this@CheckinActivity, "Unable to post data to server", Toast.LENGTH_SHORT).show()
                     Log.e("Main", "codeScanner: ${it.message}")
                 }
             }
@@ -64,6 +74,35 @@ class CheckinActivity : AppCompatActivity() {
     override fun onPause() {
         codeScanner.releaseResources()
         super.onPause()
+    }
+
+    private fun postCheckin(requestBody: RequestBody) {
+        progressBarCheckin__checkinLoading.visibility = View.VISIBLE
+        with(ApiService) {
+            endpoint.checkin(requestBody)
+                .enqueue(object : Callback<ResponseBody> {
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        progressBarCheckin__checkinLoading.visibility = View.GONE
+                        Log.d("CheckinActivity", ">>> onFailure <<< : $t")
+                    }
+
+                    override fun onResponse(
+                        call: Call<ResponseBody>,
+                        response: Response<ResponseBody>
+                    ) {
+                        progressBarCheckin__checkinLoading.visibility = View.GONE
+                        if (response.isSuccessful) {
+                            Log.d("CheckinActivity", response.body().toString())
+
+                        } else {
+                            Log.d("CheckinActivity", response.body().toString())
+                            Log.d("CheckinActivity", response.message())
+                            Toast.makeText(this@CheckinActivity, response.message(), Toast.LENGTH_SHORT)
+                                .show()
+                        }
+                    }
+                })
+        }
     }
 
     private fun setupPermissions() {
