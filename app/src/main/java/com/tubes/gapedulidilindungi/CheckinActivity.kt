@@ -1,13 +1,11 @@
 package com.tubes.gapedulidilindungi
 
 import android.Manifest
-import android.content.Context
 import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -18,12 +16,11 @@ import com.budiyev.android.codescanner.ErrorCallback
 import com.budiyev.android.codescanner.ScanMode
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
-import com.tubes.gapedulidilindungi.models.ProvinceCityModel
+import com.tubes.gapedulidilindungi.models.CheckinRequestModel
+import com.tubes.gapedulidilindungi.models.CheckinResponseModel
 import com.tubes.gapedulidilindungi.retrofit.ApiService
 import kotlinx.android.synthetic.main.activity_checkin.*
 import kotlinx.android.synthetic.main.fragment_location.*
-import okhttp3.RequestBody
-import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,6 +29,9 @@ class CheckinActivity : AppCompatActivity() {
     private lateinit var codeScanner: CodeScanner
     private lateinit var fusedLocationClient: FusedLocationProviderClient
 
+    private var lastLatitude: Double? = null
+    private var lastLongitude: Double? = null
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_checkin)
@@ -39,8 +39,8 @@ class CheckinActivity : AppCompatActivity() {
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this@CheckinActivity)
 
         setupPermissions()
-        codeScanner()
         getLastKnownLocation()
+        codeScanner()
     }
 
     private fun codeScanner() {
@@ -57,6 +57,12 @@ class CheckinActivity : AppCompatActivity() {
 
             decodeCallback = DecodeCallback {
                 runOnUiThread {
+                    getLastKnownLocation()
+
+                    val latitude = lastLatitude ?: 0.0
+                    val longitude = lastLongitude ?: 0.0
+
+                    postCheckin(it.toString(), latitude, longitude)
                     tv_text.text = it.text
                 }
             }
@@ -105,7 +111,7 @@ class CheckinActivity : AppCompatActivity() {
             //                                          int[] grantResults)
             // to handle the case where the user grants the permission. See the documentation
             // for ActivityCompat#requestPermissions for more details.
-                Log.d("Location", "No permission granted")
+            Log.d("Location", "No permission granted")
             return
         } else {
             Log.d("Location", "Permission granted")
@@ -115,37 +121,39 @@ class CheckinActivity : AppCompatActivity() {
                         Log.d("CheckinActivity", location.toString())
                         Log.d("Location", location.latitude.toString())
                         Log.d("Location", location.longitude.toString())
-                        // use your location object
-                        // get latitude , longitude and other info from this
+                        lastLatitude = location.latitude
+                        lastLongitude = location.longitude
                     }
                 }
         }
     }
 
-    private fun postCheckin(requestBody: RequestBody) {
+    private fun postCheckin(qrCodeResult: String, latitude: Double, longitude: Double) {
         progressBarCheckin__checkinLoading.visibility = View.VISIBLE
+        val checkinRequestObject =
+            CheckinRequestModel(qrCode = qrCodeResult, latitude = latitude, longitude = longitude)
         with(ApiService) {
-            endpoint.checkin(requestBody)
-                .enqueue(object : Callback<ResponseBody> {
-                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            endpoint.checkin(checkinRequestObject)
+                .enqueue(object : Callback<CheckinResponseModel> {
+                    override fun onFailure(call: Call<CheckinResponseModel>, t: Throwable) {
                         progressBarCheckin__checkinLoading.visibility = View.GONE
                         Log.d("CheckinActivity", ">>> onFailure <<< : $t")
                     }
 
                     override fun onResponse(
-                        call: Call<ResponseBody>,
-                        response: Response<ResponseBody>
+                        call: Call<CheckinResponseModel>,
+                        response: Response<CheckinResponseModel>
                     ) {
                         progressBarCheckin__checkinLoading.visibility = View.GONE
                         if (response.isSuccessful) {
-                            Log.d("CheckinActivity", response.body().toString())
-
+                            Toast.makeText(this@CheckinActivity, response.body()?.data?.userStatus, Toast.LENGTH_SHORT).show()
+                            Log.d("PostCheckin", response.body().toString())
                         } else {
-                            Log.d("CheckinActivity", response.body().toString())
-                            Log.d("CheckinActivity", response.message())
+                            Log.d("PostCheckin", response.body().toString())
+                            Log.d("PostCheckin", response.toString())
                             Toast.makeText(
                                 this@CheckinActivity,
-                                response.message(),
+                                response.body().toString(),
                                 Toast.LENGTH_SHORT
                             )
                                 .show()
@@ -157,10 +165,10 @@ class CheckinActivity : AppCompatActivity() {
 
     private fun setupPermissions() {
         val cameraPermission =
-            ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA)
+            ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
         val locationPermission = ContextCompat.checkSelfPermission(
             this,
-            android.Manifest.permission.ACCESS_COARSE_LOCATION
+            Manifest.permission.ACCESS_COARSE_LOCATION
         )
 
         if (cameraPermission != PackageManager.PERMISSION_GRANTED) {
@@ -176,13 +184,13 @@ class CheckinActivity : AppCompatActivity() {
         when (requestCode) {
             CAMERA_REQ -> {
                 ActivityCompat.requestPermissions(
-                    this, arrayOf(android.Manifest.permission.CAMERA),
+                    this, arrayOf(Manifest.permission.CAMERA),
                     CAMERA_REQ
                 )
             }
             LOCATION_REQ -> {
                 ActivityCompat.requestPermissions(
-                    this, arrayOf(android.Manifest.permission.ACCESS_COARSE_LOCATION),
+                    this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION),
                     LOCATION_REQ
                 )
             }

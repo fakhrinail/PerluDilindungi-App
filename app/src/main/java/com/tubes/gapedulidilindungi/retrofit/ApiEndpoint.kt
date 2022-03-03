@@ -1,20 +1,15 @@
 package com.tubes.gapedulidilindungi.retrofit
 
-import com.tubes.gapedulidilindungi.models.FaskesModel
-import com.tubes.gapedulidilindungi.models.NewsModel
-import com.tubes.gapedulidilindungi.models.ProvinceCityModel
+import com.tubes.gapedulidilindungi.models.*
 import okhttp3.RequestBody
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Response
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface ApiEndpoint {
     @GET("api/get-news")
-    fun getNews():Call<NewsModel>
+    fun getNews(): Call<NewsModel>
 
     @GET("api/get-province")
     fun getProvinces():Call<ProvinceCityModel>
@@ -25,6 +20,7 @@ interface ApiEndpoint {
     @GET("api/get-faskes-vaksinasi")
     fun getFaskes(@Query("province") province: String, @Query("city") city: String):Call<FaskesModel>
 
-    @POST("checkin")
-    fun checkin(@Body requestBody: RequestBody): Call<ResponseBody>
+    @Headers("Content-Type: application/json")
+    @POST("check-in")
+    fun checkin(@Body checkinData: CheckinRequestModel): Call<CheckinResponseModel>
 }
