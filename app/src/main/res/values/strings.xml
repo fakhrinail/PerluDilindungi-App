@@ -2,6 +2,8 @@
     <string name="app_name">GapeduliDilindungi</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="submit">Qr Code Scanner</string>
+    <string name="scanning">Scanning..</string>
     <string-array name="test_dropdown">
         <item>Jatim</item>
         <item>Jabar</item>
