@@ -118,9 +118,6 @@ class CheckinActivity : AppCompatActivity() {
             fusedLocationClient.lastLocation
                 .addOnSuccessListener { location ->
                     if (location != null) {
-                        Log.d("CheckinActivity", location.toString())
-                        Log.d("Location", location.latitude.toString())
-                        Log.d("Location", location.longitude.toString())
                         lastLatitude = location.latitude
                         lastLongitude = location.longitude
                     }
@@ -146,11 +143,12 @@ class CheckinActivity : AppCompatActivity() {
                     ) {
                         progressBarCheckin__checkinLoading.visibility = View.GONE
                         if (response.isSuccessful) {
-                            Toast.makeText(this@CheckinActivity, response.body()?.data?.userStatus, Toast.LENGTH_SHORT).show()
-                            Log.d("PostCheckin", response.body().toString())
+                            val userData = response.body()?.data
+                            when (userData?.userStatus) {
+                                "red", "black" -> tv_text.text = userData.reason
+                                "yellow", "green" -> tv_text.text = userData.userStatus
+                            }
                         } else {
-                            Log.d("PostCheckin", response.body().toString())
-                            Log.d("PostCheckin", response.toString())
                             Toast.makeText(
                                 this@CheckinActivity,
                                 response.body().toString(),
