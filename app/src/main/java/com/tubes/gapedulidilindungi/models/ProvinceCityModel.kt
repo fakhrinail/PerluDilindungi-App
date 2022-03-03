@@ -1,4 +1,4 @@
-package com.tubes.gapedulidilindungi
+package com.tubes.gapedulidilindungi.models
 
 data class ProvinceCityModel(
     val curr_val: String,

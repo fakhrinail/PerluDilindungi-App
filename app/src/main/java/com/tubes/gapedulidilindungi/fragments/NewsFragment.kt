@@ -9,6 +9,7 @@ import android.view.ViewGroup
 import androidx.fragment.app.FragmentTransaction
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tubes.gapedulidilindungi.*
+import com.tubes.gapedulidilindungi.models.NewsModel
 import com.tubes.gapedulidilindungi.retrofit.ApiService
 import kotlinx.android.synthetic.main.fragment_news.*
 import retrofit2.Call

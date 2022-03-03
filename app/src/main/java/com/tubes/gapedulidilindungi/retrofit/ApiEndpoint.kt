@@ -1,9 +1,8 @@
 package com.tubes.gapedulidilindungi.retrofit
 
-import com.tubes.gapedulidilindungi.FaskesDetail
-import com.tubes.gapedulidilindungi.FaskesModel
-import com.tubes.gapedulidilindungi.NewsModel
-import com.tubes.gapedulidilindungi.ProvinceCityModel
+import com.tubes.gapedulidilindungi.models.FaskesModel
+import com.tubes.gapedulidilindungi.models.NewsModel
+import com.tubes.gapedulidilindungi.models.ProvinceCityModel
 import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Query

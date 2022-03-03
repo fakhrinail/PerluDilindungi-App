@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
+import com.tubes.gapedulidilindungi.models.NewsModel
 import kotlinx.android.synthetic.main.adapter_news.view.*
 
 class NewsAdapter(val results : ArrayList<NewsModel.Results>, val listener: OnAdapterListener) : RecyclerView.Adapter<NewsAdapter.ViewHolder>() {

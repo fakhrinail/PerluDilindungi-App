@@ -1,4 +1,4 @@
-package com.tubes.gapedulidilindungi
+package com.tubes.gapedulidilindungi.models
 
 import java.util.*
 import kotlin.collections.ArrayList
