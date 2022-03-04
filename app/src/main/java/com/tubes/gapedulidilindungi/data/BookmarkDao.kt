@@ -10,7 +10,7 @@ interface BookmarkDao {
     fun addBookmark(bookmark: BookmarkData)
 
     @Delete
-    suspend fun deleteBookmark(bookmark: BookmarkData)
+    fun deleteBookmark(bookmark: BookmarkData)
 
     @Query("SELECT * FROM bookmark_table")
     fun readAllData(): LiveData<List<BookmarkData>>

@@ -14,13 +14,8 @@ import com.tubes.gapedulidilindungi.NewsAdapter
 import com.tubes.gapedulidilindungi.R
 import com.tubes.gapedulidilindungi.data.BookmarkData
 import com.tubes.gapedulidilindungi.data.BookmarkViewModel
-import com.tubes.gapedulidilindungi.models.NewsModel
-import com.tubes.gapedulidilindungi.retrofit.ApiService
 import kotlinx.android.synthetic.main.fragment_bookmark.*
-import kotlinx.android.synthetic.main.fragment_news.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
+import kotlinx.android.synthetic.main.fragment_bookmark.view.*
 
 class BookmarkFragment : Fragment() {
 
@@ -66,14 +61,15 @@ class BookmarkFragment : Fragment() {
             }
 
         })
+
+        mBookmarkViewModel = ViewModelProvider(this).get(BookmarkViewModel::class.java)
+        mBookmarkViewModel.readAllData.observe(viewLifecycleOwner, Observer { bookmark ->
+            faskesAdapter.setData(bookmark)
+        })
+
         recyclerViewFaskes__faskesList.apply {
             layoutManager = LinearLayoutManager(context)
             adapter = faskesAdapter
         }
-
-//        mBookmarkViewModel = ViewModelProvider(this).get(BookmarkViewModel::class.java)
-//        mBookmarkViewModel.readAllData.observe(viewLifecycleOwner, Observer { bookmark ->
-//            faskesAdapter.setData(bookmark)
-//        })
     }
 }
