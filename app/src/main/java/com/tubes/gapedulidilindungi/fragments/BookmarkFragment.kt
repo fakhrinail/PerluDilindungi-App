@@ -28,7 +28,7 @@ class BookmarkFragment : Fragment() {
     }
 
     private lateinit var mBookmarkViewModel: BookmarkViewModel
-
+    private lateinit var bookmarkList: List<BookmarkData>
     lateinit var faskesAdapter: FaskesAdapter
 
     override fun onCreateView(
@@ -101,6 +101,7 @@ class BookmarkFragment : Fragment() {
             mBookmarkViewModel = ViewModelProvider(this).get(BookmarkViewModel::class.java)
             mBookmarkViewModel.readAllData.observe(viewLifecycleOwner, Observer { bookmark ->
                 faskesAdapter.setData(bookmark)
+                bookmarkList = bookmark
             })
         }
 
