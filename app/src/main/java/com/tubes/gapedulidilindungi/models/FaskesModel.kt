@@ -6,10 +6,10 @@ data class FaskesModel(
     val success: Boolean,
     val message: String,
     val count_total: Int,
-    val results: List<FasksesResults>
+    val data: List<FaskesResults>
 )
 
-data class FasksesResults(
+data class FaskesResults(
     @SerializedName("id") var id: Int? = null,
     @SerializedName("kode") var kode: String? = null,
     @SerializedName("nama") var nama: String? = null,

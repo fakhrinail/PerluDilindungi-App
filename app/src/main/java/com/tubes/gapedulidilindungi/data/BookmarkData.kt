@@ -10,9 +10,14 @@ import kotlinx.android.parcel.Parcelize
 data class BookmarkData (
     @PrimaryKey
     val kodeFaskes: String,
-    val namaFaskes: String,
-    val alamatFaskes: String,
-    val noTelpFaskes: String,
-    val jenisFaskes: String,
-    val statusFaskes: String
+    val namaFaskes: String?,
+    val alamatFaskes: String?,
+    val noTelpFaskes: String?,
+    val jenisFaskes: String?,
+    val statusFaskes: String?
 ): Parcelable
+
+@Parcelize
+data class ListBookmarkData (
+    var listFaskes: List<BookmarkData>
+    ) : Parcelable
