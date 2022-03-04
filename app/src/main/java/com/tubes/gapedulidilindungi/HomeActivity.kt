@@ -33,7 +33,17 @@ class HomeActivity : AppCompatActivity() {
 //                        bookmarkFragment
 //                    )
 //                }
-                R.id.icNavbar__bookmark -> replaceFragment(bookmarkFragment)
+                R.id.icNavbar__bookmark -> {
+                    val fragment = supportFragmentManager.findFragmentById(R.id.fragment_container)
+                    if (fragment != null) {
+                        val childFragment = fragment.childFragmentManager.findFragmentById(R.id.fragment_container_2)
+                        if (childFragment !== null) {
+                            fragment.childFragmentManager.beginTransaction().remove(childFragment)
+                        }
+                        supportFragmentManager.beginTransaction().remove(fragment)
+                    }
+                    replaceFragment(bookmarkFragment)
+                }
             }
             true
         }
@@ -44,7 +54,7 @@ class HomeActivity : AppCompatActivity() {
         }
     }
 
-    private fun replaceFragment(fragment: Fragment) {
+    public fun replaceFragment(fragment: Fragment) {
         if (fragment != null) {
             val transaction = supportFragmentManager.beginTransaction()
             transaction.replace(R.id.fragment_container, fragment)

@@ -12,6 +12,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.tubes.gapedulidilindungi.FaskesAdapter
+import com.tubes.gapedulidilindungi.HomeActivity
 import com.tubes.gapedulidilindungi.NewsAdapter
 import com.tubes.gapedulidilindungi.R
 import com.tubes.gapedulidilindungi.data.BookmarkData
@@ -62,21 +63,30 @@ class BookmarkFragment : Fragment() {
                 bundle.putString("status_faskes", result.statusFaskes)
                 faskesDetailsFragment.arguments = bundle
 
-//                val fragment = parentFragmentManager.findFragmentById(R.id.fragment_container)
-//                if (fragment != null) {
-//                    parentFragmentManager.beginTransaction().remove(fragment).commit()
-//                }
+                val parentFragment = parentFragment
+                parentFragmentManager.beginTransaction().remove(this@BookmarkFragment).commit()
+                if (parentFragment != null) {
+                    Log.d("FRAGMENT", "TEST")
+//                    parentFragmentManager.beginTransaction().remove().commit()
+                    (activity as HomeActivity)?.replaceFragment(faskesDetailsFragment)
+//                    parentFragmentManager.beginTransaction().replace(R.id.fragment_container, faskesDetailsFragment).commit()
+                } else {
+                    Log.d("FRAGMENT", "TEST2")
+                    (activity as HomeActivity)?.replaceFragment(faskesDetailsFragment)
+//                    parentFragmentManager.beginTransaction().replace(R.id.fragment_container, faskesDetailsFragment).commit()
+                }
+
 //                parentFragmentManager.beginTransaction().apply {
-//                    add(R.id.fragment_container, faskesDetailsFragment)
+//                    replace(R.id.fragment_container, faskesDetailsFragment)
 //                    commit()
 //                }
 
-                if (faskesDetailsFragment != null) {
-                    val transaction: FragmentTransaction = fragmentManager!!.beginTransaction()
-                    transaction.replace(R.id.fragment_container, faskesDetailsFragment)
-                    transaction.commit()
-                }
-
+//                if (faskesDetailsFragment != null) {
+//                    val transaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+//                    transaction.replace(R.id.fragment_container, faskesDetailsFragment)
+//                    transaction.commit()
+//                }
+                
             }
 
         })
