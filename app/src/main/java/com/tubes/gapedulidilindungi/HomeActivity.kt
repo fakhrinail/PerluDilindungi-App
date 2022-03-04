@@ -4,6 +4,8 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import androidx.fragment.app.FragmentManager
 import com.tubes.gapedulidilindungi.fragments.BookmarkFragment
 import com.tubes.gapedulidilindungi.fragments.NewsFragment
 import com.tubes.gapedulidilindungi.fragments.SearchFragment
@@ -23,6 +25,14 @@ class HomeActivity : AppCompatActivity() {
             when(it.itemId){
                 R.id.icNavbar__news -> replaceFragment(newsFragment)
                 R.id.icNavbar__location -> replaceFragment(searchFragment)
+//                R.id.icNavbar__location -> {
+//                    supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
+//                        searchFragment
+//                    )
+//                    supportFragmentManager.beginTransaction().replace(R.id.fragment_container_2,
+//                        bookmarkFragment
+//                    )
+//                }
                 R.id.icNavbar__bookmark -> replaceFragment(bookmarkFragment)
             }
             true

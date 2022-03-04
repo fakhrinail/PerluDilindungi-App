@@ -1,6 +1,7 @@
 package com.tubes.gapedulidilindungi.fragments
 
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,10 +15,15 @@ import com.tubes.gapedulidilindungi.NewsAdapter
 import com.tubes.gapedulidilindungi.R
 import com.tubes.gapedulidilindungi.data.BookmarkData
 import com.tubes.gapedulidilindungi.data.BookmarkViewModel
+import com.tubes.gapedulidilindungi.data.ListBookmarkData
 import kotlinx.android.synthetic.main.fragment_bookmark.*
 import kotlinx.android.synthetic.main.fragment_bookmark.view.*
 
 class BookmarkFragment : Fragment() {
+
+    companion object {
+        const val LIST_FASKES = "LIST_FASKES"
+    }
 
     private lateinit var mBookmarkViewModel: BookmarkViewModel
 
@@ -28,6 +34,7 @@ class BookmarkFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_bookmark, container, false)
     }
 
@@ -62,10 +69,18 @@ class BookmarkFragment : Fragment() {
 
         })
 
-        mBookmarkViewModel = ViewModelProvider(this).get(BookmarkViewModel::class.java)
-        mBookmarkViewModel.readAllData.observe(viewLifecycleOwner, Observer { bookmark ->
-            faskesAdapter.setData(bookmark)
-        })
+        val bundle = arguments
+        Log.i("BISMILLAH", arguments.toString())
+        if (bundle != null) {
+            val data = bundle.getParcelable<ListBookmarkData>(LIST_FASKES)
+            Log.i("BISMILLAH", data?.listFaskes.toString())
+            data?.listFaskes?.let { faskesAdapter.setData(it) }
+        } else {
+            mBookmarkViewModel = ViewModelProvider(this).get(BookmarkViewModel::class.java)
+            mBookmarkViewModel.readAllData.observe(viewLifecycleOwner, Observer { bookmark ->
+                faskesAdapter.setData(bookmark)
+            })
+        }
 
         recyclerViewFaskes__faskesList.apply {
             layoutManager = LinearLayoutManager(context)
