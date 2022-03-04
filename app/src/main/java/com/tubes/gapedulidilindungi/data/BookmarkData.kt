@@ -9,6 +9,7 @@ import kotlinx.android.parcel.Parcelize
 @Entity(tableName = "bookmark_table")
 data class BookmarkData (
     @PrimaryKey
+    val id: Int,
     val kodeFaskes: String,
     val namaFaskes: String?,
     val alamatFaskes: String?,

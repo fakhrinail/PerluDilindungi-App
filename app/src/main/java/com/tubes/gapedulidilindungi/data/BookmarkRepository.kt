@@ -6,11 +6,15 @@ class BookmarkRepository(private val bookmarkDao: BookmarkDao) {
 
     val readAllData: LiveData<List<BookmarkData>> = bookmarkDao.readAllData()
 
-    suspend fun addBookmark(bookmark: BookmarkData) {
+    fun addBookmark(bookmark: BookmarkData) {
         bookmarkDao.addBookmark(bookmark)
     }
 
-    suspend fun deleteBookmark(bookmark: BookmarkData) {
-        bookmarkDao.deleteBookmark(bookmark)
+    fun deleteBookmark(id: Int) {
+        bookmarkDao.deleteBookmark(id)
+    }
+
+    fun isBookmarkExist(id: Int) {
+        bookmarkDao.isBookmarkExist(id)
     }
 }

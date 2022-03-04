@@ -212,6 +212,7 @@ class SearchFragment : Fragment() {
 
                             val listFaskes = sortedListFaskes?.map {
                                 BookmarkData(
+                                    id = it.id!!,
                                     kodeFaskes = it.kode.toString(),
                                     namaFaskes = it.nama,
                                     alamatFaskes = it.alamat,

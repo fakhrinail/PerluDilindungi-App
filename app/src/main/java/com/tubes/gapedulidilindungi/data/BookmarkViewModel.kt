@@ -24,10 +24,15 @@ class BookmarkViewModel(application: Application): AndroidViewModel(application)
         }
     }
 
-    fun deleteBookmark(bookmark: BookmarkData) {
+    fun deleteBookmark(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            repository.deleteBookmark(bookmark)
+            repository.deleteBookmark(id)
         }
     }
 
+    fun isBookmarkExist(id: Int) {
+        viewModelScope.launch(Dispatchers.IO) {
+            repository.isBookmarkExist(id)
+        }
+    }
 }

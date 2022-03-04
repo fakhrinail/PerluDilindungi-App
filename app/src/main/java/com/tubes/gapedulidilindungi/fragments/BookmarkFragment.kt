@@ -52,6 +52,7 @@ class BookmarkFragment : Fragment() {
             override fun onClick(result: BookmarkData) {
                 val faskesDetailsFragment = FaskesDetailsFragment()
                 val bundle = Bundle()
+                bundle.putInt("id", result.id)
                 bundle.putString("kode_faskes", result.kodeFaskes)
                 bundle.putString("nama_faskes", result.namaFaskes)
                 bundle.putString("alamat_faskes", result.alamatFaskes)
@@ -60,11 +61,21 @@ class BookmarkFragment : Fragment() {
                 bundle.putString("status_faskes", result.statusFaskes)
                 faskesDetailsFragment.arguments = bundle
 
-                if (faskesDetailsFragment != null) {
-                    val transaction: FragmentTransaction = fragmentManager!!.beginTransaction()
-                    transaction.replace(R.id.fragment_container, faskesDetailsFragment)
-                    transaction.commit()
-                }
+//                val fragment = parentFragmentManager.findFragmentById(R.id.fragment_container)
+//                if (fragment != null) {
+//                    parentFragmentManager.beginTransaction().remove(fragment).commit()
+//                }
+//                parentFragmentManager.beginTransaction().apply {
+//                    add(R.id.fragment_container, faskesDetailsFragment)
+//                    commit()
+//                }
+
+//                if (faskesDetailsFragment != null) {
+//                    val transaction: FragmentTransaction = fragmentManager!!.beginTransaction()
+//                    transaction.replace(R.id.fragment_container, faskesDetailsFragment)
+//                    transaction.commit()
+//                }
+                
             }
 
         })
