@@ -67,18 +67,6 @@ dependencies {
     kapt "androidx.room:room-compiler:2.2.5"
     implementation "androidx.room:room-ktx:2.2.5"
     androidTestImplementation "androidx.room:room-testing:2.2.5"
-    def room_version = "2.4.2"
-
-    implementation "androidx.room:room-runtime:$room_version"
-    annotationProcessor "androidx.room:room-compiler:$room_version"
-    // qr code scanner
-    implementation 'com.budiyev.android:code-scanner:2.1.0'
-
-    // optional - RxJava2 support for Room
-    implementation "androidx.room:room-rxjava2:$room_version"
-
-    // optional - RxJava3 support for Room
-    implementation "androidx.room:room-rxjava3:$room_version"
 
     // optional - Guava support for Room, including Optional and ListenableFuture
     implementation "androidx.room:room-guava:$room_version"
@@ -100,4 +88,13 @@ dependencies {
     api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5"
     // location
     implementation 'com.google.android.gms:play-services-location:17.0.0'
+    // Lifecycle components
+    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
+    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0"
+
+    // Kotlin components
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5"
+    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5"
 }
