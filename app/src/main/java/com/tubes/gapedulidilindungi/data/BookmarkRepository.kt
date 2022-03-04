@@ -9,4 +9,8 @@ class BookmarkRepository(private val bookmarkDao: BookmarkDao) {
     suspend fun addBookmark(bookmark: BookmarkData) {
         bookmarkDao.addBookmark(bookmark)
     }
+
+    suspend fun deleteBookmark(bookmark: BookmarkData) {
+        bookmarkDao.deleteBookmark(bookmark)
+    }
 }
