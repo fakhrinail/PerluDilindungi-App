@@ -1,5 +1,7 @@
 package com.tubes.gapedulidilindungi.fragments
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -49,6 +51,20 @@ class FaskesDetailsFragment : Fragment() {
         }
         else {
             view.imageViewFaskes__statusimage.setImageResource(R.drawable.not_ready)
+        }
+
+        view.button__gmaps.setOnClickListener {
+            // Create a Uri from an intent string. Use the result to create an Intent.
+            val gmmIntentUri = Uri.parse("geo:0,0?q=" + alamat)
+
+            // Create an Intent from gmmIntentUri. Set the action to ACTION_VIEW
+            val mapIntent = Intent(Intent.ACTION_VIEW, gmmIntentUri)
+
+            // Make the Intent explicit by setting the Google Maps package
+            mapIntent.setPackage("com.google.android.apps.maps")
+
+            // Attempt to start an activity that can handle the Intent
+            startActivity(mapIntent)
         }
 
         mBookmarkViewModel = ViewModelProvider(this).get(BookmarkViewModel::class.java)
