@@ -11,6 +11,7 @@ abstract class BookmarkDatabase: RoomDatabase() {
     abstract fun bookmarkDao(): BookmarkDao
 
     companion object {
+        @Volatile
         private var INSTANCE: BookmarkDatabase? = null
 
         fun getDatabase(context: Context): BookmarkDatabase{
