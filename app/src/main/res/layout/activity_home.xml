@@ -28,6 +28,8 @@
         app:layout_constraintBottom_toTopOf="@id/bottomNavbar"
         app:layout_constraintEnd_toEndOf="parent"
         app:maxImageSize="32dp"
+        app:borderWidth="0dp"
+        app:rippleColor="@color/pl_blue"
         app:tint="@color/white" />
 
     <com.google.android.material.bottomnavigation.BottomNavigationView
