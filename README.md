@@ -15,7 +15,7 @@ Untuk layar pencarian faskes, menggunakan fragment yang dihost pada activity uta
 Untuk layar check-in, menggunakan activity berbeda dari activity utama. Pada saat membuka layar akan diminta permission camera dan location, kamera akan otomatis menyala jika sudah diberi permission. Jika QR code terdeteksi akan mengeluarkan status dan alasan.
 
 ## Screenshots
-![Example screenshot](./screenshot/test.png)
+![Search screenshot](./screenshot/search.png)
 
 ## Libraries
 * Budiyev Code Scanner - Library untuk QR Code Scanner
