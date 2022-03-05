@@ -28,7 +28,6 @@ class BookmarkFragment : Fragment() {
     }
 
     private lateinit var mBookmarkViewModel: BookmarkViewModel
-    private lateinit var bookmarkList: List<BookmarkData>
     lateinit var faskesAdapter: FaskesAdapter
 
     override fun onCreateView(
@@ -36,8 +35,14 @@ class BookmarkFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_bookmark, container, false)
 
-        return inflater.inflate(R.layout.fragment_bookmark, container, false)
+        val bundle = arguments
+        if (bundle != null) {
+            view.textViewFaskes__heading.visibility = View.GONE
+        }
+
+        return view
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -101,7 +106,6 @@ class BookmarkFragment : Fragment() {
             mBookmarkViewModel = ViewModelProvider(this).get(BookmarkViewModel::class.java)
             mBookmarkViewModel.readAllData.observe(viewLifecycleOwner, Observer { bookmark ->
                 faskesAdapter.setData(bookmark)
-                bookmarkList = bookmark
             })
         }
 
