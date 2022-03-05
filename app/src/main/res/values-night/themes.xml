@@ -3,6 +3,7 @@
     <style name="Theme.GapeduliDilindungi" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <!-- Primary brand color. -->
         <item name="colorPrimary">#41A7F6</item>
+        <item name="colorAccent">#41A7F6</item>
         <item name="colorPrimaryVariant">#41A7F6</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
