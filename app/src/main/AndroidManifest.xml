@@ -4,7 +4,7 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
@@ -15,7 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.GapeduliDilindungi">
         <activity android:name=".CheckinActivity" />
-        <activity android:name=".SearchActivity" />
+        <activity
+            android:name=".SearchActivity"
+            android:configChanges="orientation" />
         <activity
             android:name=".HomeActivity"
             android:label="Home" />
