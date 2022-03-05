@@ -16,8 +16,11 @@ Untuk layar check-in, menggunakan activity berbeda dari activity utama. Pada saa
 
 ## Screenshots
 ![Search screenshot](./screenshot/search.png)
+### Halaman Bookmark
 ![Bookmark screenshot](./screenshot/bookmark.jpg)
+### Halaman Detail Faskes
 ![Detail-Faskes](./screenshot/detail.jpg)
+### Halaman Detail Faskes (Bookmarked)
 ![Detail-Faskes-Bookmarked screenshot](./screenshot/detail-bookmarked.jpg)
 
 ## Libraries
