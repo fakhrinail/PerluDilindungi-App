@@ -10,12 +10,27 @@
 ## General info
 Pada aplikasi ini, terdapat beberapa layar yang dibuat, diantaranya layar daftar berita COVID-19, detail berita COVID-19, pencarian faskes, daftar faskes untuk vaksinasi, detail faskes, daftar bookmark faskes dan layar check-in
 
+Untuk layar berita COVID-19, menggunakan fragment yang dihost pada activity utama. Kemudian akan menampilkan kumpulan berita yang berisi judul, tanggal publikasi, serta thumbnail dari artikel tersebut. Jika pengguna meng-klik salah satu berita, maka akan diarahkan ke webview yang berisi berita lengkap dari judul yang di klik.
+
 Untuk layar pencarian faskes, menggunakan fragment yang dihost pada activity utama. Jika pengguna melakukan search, akan keluar layar daftar faskes berdasarkan hasil pencarian. Layar pencarian faskes jika diubah orientasinya menjadi landscape akan berada di kiri dan daftar faskes di kanan.
 
 Untuk layar check-in, menggunakan activity berbeda dari activity utama. Pada saat membuka layar akan diminta permission camera dan location, kamera akan otomatis menyala jika sudah diberi permission. Jika QR code terdeteksi akan mengeluarkan status dan alasan.
 
 ## Screenshots
+### Halaman News
+![News screenshot](./screenshot/news.png)
+### Halaman News Detail
+![News Detail screenshot](./screenshot/news-detail.png)
+### Halaman Search
 ![Search screenshot](./screenshot/search.png)
+### Halaman Search Results
+![Search screenshot](./screenshot/search_results.png)
+### Halaman Search Landscape
+![Search landscape screenshot](./screenshot/search_results_land.png)
+### Halaman QR
+![QR Result screenshot](./screenshot/qr_result.png)
+### Halaman QR Temperature
+![QR Temperature screenshot](./screenshot/qr_result_temp.png)
 ### Halaman Bookmark
 ![Bookmark screenshot](./screenshot/bookmark.jpg)
 ### Halaman Detail Faskes
