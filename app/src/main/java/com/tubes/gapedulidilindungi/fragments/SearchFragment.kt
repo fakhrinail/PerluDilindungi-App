@@ -11,6 +11,8 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.activity.result.ActivityResultCallback
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import com.google.android.gms.location.FusedLocationProviderClient
 import com.google.android.gms.location.LocationServices
@@ -68,7 +70,6 @@ class SearchFragment : Fragment() {
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
-        getLastKnownLocation()
 
         binding.dropdownProvince.onItemSelectedListener =
             object : AdapterView.OnItemSelectedListener {
@@ -107,6 +108,43 @@ class SearchFragment : Fragment() {
                     .show()
             }
         }
+
+        val permissionLauncher = registerForActivityResult(
+            ActivityResultContracts.RequestPermission()
+        ) { isGranted ->
+            if (isGranted) {
+                if (ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.ACCESS_FINE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.ACCESS_COARSE_LOCATION
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    // TODO: Consider calling
+                    //    ActivityCompat#requestPermissions
+                    // here to request the missing permissions, and then overriding
+                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+                    //                                          int[] grantResults)
+                    // to handle the case where the user grants the permission. See the documentation
+                    // for ActivityCompat#requestPermissions for more details.
+                    return@registerForActivityResult
+                }
+                Toast.makeText(requireContext(), "Permission granted", Toast.LENGTH_LONG).show()
+                fusedLocationClient.lastLocation
+                    .addOnSuccessListener { location ->
+                        if (location != null) {
+                            lastLatitude = location.latitude
+                            lastLongitude = location.longitude
+                        }
+                    }
+            }
+            else {
+                Toast.makeText(requireContext(), "Permission not granted", Toast.LENGTH_LONG).show()
+            }
+        }
+
+        permissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
 
         return binding.root
     }
@@ -259,30 +297,6 @@ class SearchFragment : Fragment() {
                         }
                     }
                 })
-        }
-    }
-
-    private fun getLastKnownLocation() {
-        if (ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireContext(),
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            Toast.makeText(requireContext(), "Permission not granted", Toast.LENGTH_SHORT)
-                .show()
-            return
-        } else {
-            Log.d("Location", "Permission granted")
-            fusedLocationClient.lastLocation
-                .addOnSuccessListener { location ->
-                    if (location != null) {
-                        lastLatitude = location.latitude
-                        lastLongitude = location.longitude
-                    }
-                }
         }
     }
 
