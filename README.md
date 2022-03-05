@@ -3,7 +3,7 @@
 ## Table of contents
 * [General info](#general-info)
 * [Screenshots](#screenshots)
-* Libraries](#libraries)
+* [Libraries](#libraries)
 * [Features](#features)
 * [Creators](#creators)
 
@@ -16,11 +16,17 @@ Untuk layar check-in, menggunakan activity berbeda dari activity utama. Pada saa
 
 ## Screenshots
 ![Search screenshot](./screenshot/search.png)
+![Bookmark screenshot](./screenshot/bookmark.jpg)
+![Detail-Faskes](./screenshot/detail.jpg)
+![Detail-Faskes-Bookmarked screenshot](./screenshot/detail-bookmarked.jpg)
 
 ## Libraries
 * Budiyev Code Scanner - Library untuk QR Code Scanner
 * Google Play Services Location - Library untuk mendapatkan lokasi melalui Google Play Services
 * Material - Library untuk component yang sudah disediakan oleh Google
+* Room - Library untuk mengakses sqlite room component
+* Lifecycle - Library untuk memantau LiveData pada ViewModel
+* Couroutine - Library untuk mengelola IO ViewModel secara asinkron
 
 ## Features
 * Fragment Daftar Faskes 	: 13519053
