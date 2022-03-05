@@ -16,6 +16,10 @@ Untuk layar pencarian faskes, menggunakan fragment yang dihost pada activity uta
 
 Untuk layar check-in, menggunakan activity berbeda dari activity utama. Pada saat membuka layar akan diminta permission camera dan location, kamera akan otomatis menyala jika sudah diberi permission. Jika QR code terdeteksi akan mengeluarkan status dan alasan.
 
+Untuk layar bookmark, menggunakan fragment yang dihost pada activity utama. Jika pengguna sudah menambahkan bookmark, akan muncul daftar faskes seperti pada layar hasil pencarian. Jika daftar ditekan, pengguna akan dialihkan ke layar detail faskes.
+
+Untuk layar detail faskes, menggunakan fragment yang dihost pada activity utama. Jika pengguna belum bookmark faskes tersebut maka akan terdapat tombol "Google Maps" dan "+ Bookmark". Tombol "+ Bookmark" akan menambahkan faskes tersebut ke dalam daftar bookmark. Jika sudah, terdapat tombol "Google Maps" dan "- Unbookmark". Tombol "- Unbookmark" akan menghapus faskes dari basis data. Jika tombol "Google Maps" ditekan, pengguna akan dialihkan pada aplikasi Google Maps dan diarahkan pada alamat faskes yang tertera.
+
 ## Screenshots
 ### Halaman News
 ![News screenshot](./screenshot/news.png)
