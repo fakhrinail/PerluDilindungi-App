@@ -6,6 +6,17 @@
     android:layout_height="match_parent"
     tools:context=".SearchActivity">
 
+    <TextView
+        android:id="@+id/tv_headingSearch"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Search Faskes"
+        android:padding="30dp"
+        android:textSize="34sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <Spinner
         android:id="@+id/dropdown__province"
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox.ExposedDropdownMenu"
@@ -17,7 +28,7 @@
         android:hint="Provinsi"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@id/tv_headingSearch" />
 
     <Spinner
         android:id="@+id/dropdown__city"
