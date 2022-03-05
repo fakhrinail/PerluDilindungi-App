@@ -32,9 +32,9 @@ Untuk layar detail faskes, menggunakan fragment yang dihost pada activity utama.
 ### Halaman Search Landscape
 ![Search landscape screenshot](./screenshot/search_results_land.png)
 ### Halaman QR
-![QR Result screenshot](./screenshot/qr_result.png)
+![QR Result screenshot](./screenshot/qr-result.png)
 ### Halaman QR Temperature
-![QR Temperature screenshot](./screenshot/qr_result_temp.png)
+![QR Temperature screenshot](./screenshot/qr-result-temp.jpg.png)
 ### Halaman Bookmark
 ![Bookmark screenshot](./screenshot/bookmark.jpg)
 ### Halaman Detail Faskes
