@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.WindowManager
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
@@ -156,12 +157,17 @@ class SearchFragment : Fragment() {
 
     private fun getProvincesDataFromApi() {
         binding.progressBarSearchProvincesLoading.visibility = View.VISIBLE
+        activity?.window?.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         with(ApiService) {
             endpoint.getProvinces()
 
                 .enqueue(object : Callback<ProvinceCityModel> {
                     override fun onFailure(call: Call<ProvinceCityModel>, t: Throwable) {
                         binding.progressBarSearchProvincesLoading.visibility = View.GONE
+                        activity?.window?.clearFlags(
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         Log.d("SearchFragment", ">>> onFailure <<< : $t")
                     }
 
@@ -170,6 +176,8 @@ class SearchFragment : Fragment() {
                         response: Response<ProvinceCityModel>
                     ) {
                         binding.progressBarSearchProvincesLoading.visibility = View.GONE
+                        activity?.window?.clearFlags(
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         if (response.isSuccessful) {
                             Log.d("SearchFragment", response.body().toString())
                             val provinces = response.body()!!.results.map { it.key }
@@ -193,11 +201,16 @@ class SearchFragment : Fragment() {
 
     private fun getCitiesDataFromApi(provinceId: String) {
         binding.progressBarSearchCitiesLoading.visibility = View.VISIBLE
+        activity?.window?.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         with(ApiService) {
             endpoint.getCities(provinceId)
                 .enqueue(object : Callback<ProvinceCityModel> {
                     override fun onFailure(call: Call<ProvinceCityModel>, t: Throwable) {
                         binding.progressBarSearchCitiesLoading.visibility = View.GONE
+                        activity?.window?.clearFlags(
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         Log.d("SearchFragment", ">>> onFailure <<< : $t")
                     }
 
@@ -206,6 +219,8 @@ class SearchFragment : Fragment() {
                         response: Response<ProvinceCityModel>
                     ) {
                         binding.progressBarSearchCitiesLoading.visibility = View.GONE
+                        activity?.window?.clearFlags(
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         if (response.isSuccessful) {
                             Log.d("SearchFragment", response.body().toString())
                             val cities = response.body()!!.results.map { it.key }
@@ -228,11 +243,16 @@ class SearchFragment : Fragment() {
 
     private fun getFacilitiesDataFromApi(provinceId: String, cityId: String) {
         binding.progressBarSearchSearchLoading.visibility = View.VISIBLE
+        activity?.window?.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         with(ApiService) {
             endpoint.getFaskes(provinceId, cityId)
                 .enqueue(object : Callback<FaskesModel> {
                     override fun onFailure(call: Call<FaskesModel>, t: Throwable) {
                         binding.progressBarSearchSearchLoading.visibility = View.GONE
+                        activity?.window?.clearFlags(
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         Log.d("SearchFragment", ">>> onFailure <<< : $t")
                     }
 
@@ -241,6 +261,8 @@ class SearchFragment : Fragment() {
                         response: Response<FaskesModel>
                     ) {
                         binding.progressBarSearchSearchLoading.visibility = View.GONE
+                        activity?.window?.clearFlags(
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         if (response.isSuccessful) {
                             Log.d("FaskesResults", response.body().toString())
                             val sortedListFaskes =
@@ -284,11 +306,7 @@ class SearchFragment : Fragment() {
                                     commit()
                                 }
                             }
-
-                            Log.d("ListFaskes", nearestFaskes?.listFaskes.toString())
-                            Log.d("ListFaskes", nearestFaskes.toString())
                         } else {
-                            Log.d("FaskesResults", response.body().toString())
                             Toast.makeText(
                                 requireContext(),
                                 "Unable to get facilities",

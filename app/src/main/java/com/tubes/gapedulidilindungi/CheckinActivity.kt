@@ -11,6 +11,7 @@ import android.hardware.SensorManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
@@ -145,6 +146,9 @@ class CheckinActivity : AppCompatActivity(), SensorEventListener {
 
     private fun postCheckin(qrCodeResult: String, latitude: Double, longitude: Double) {
         progressBarCheckin__checkinLoading.visibility = View.VISIBLE
+        window?.setFlags(
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
         val checkinRequestObject =
             CheckinRequestModel(qrCode = qrCodeResult, latitude = latitude, longitude = longitude)
         with(ApiService) {
@@ -152,6 +156,8 @@ class CheckinActivity : AppCompatActivity(), SensorEventListener {
                 .enqueue(object : Callback<CheckinResponseModel> {
                     override fun onFailure(call: Call<CheckinResponseModel>, t: Throwable) {
                         progressBarCheckin__checkinLoading.visibility = View.GONE
+                        window?.clearFlags(
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         Log.d("CheckinActivity", ">>> onFailure <<< : $t")
                     }
 
@@ -160,6 +166,8 @@ class CheckinActivity : AppCompatActivity(), SensorEventListener {
                         response: Response<CheckinResponseModel>
                     ) {
                         progressBarCheckin__checkinLoading.visibility = View.GONE
+                        window?.clearFlags(
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
                         if (response.isSuccessful) {
                             val userData = response.body()?.data
                             when (userData?.userStatus) {
