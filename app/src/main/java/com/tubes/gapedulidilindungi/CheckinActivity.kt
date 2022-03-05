@@ -148,7 +148,8 @@ class CheckinActivity : AppCompatActivity(), SensorEventListener {
         progressBarCheckin__checkinLoading.visibility = View.VISIBLE
         window?.setFlags(
             WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
-            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+        );
         val checkinRequestObject =
             CheckinRequestModel(qrCode = qrCodeResult, latitude = latitude, longitude = longitude)
         with(ApiService) {
@@ -157,7 +158,8 @@ class CheckinActivity : AppCompatActivity(), SensorEventListener {
                     override fun onFailure(call: Call<CheckinResponseModel>, t: Throwable) {
                         progressBarCheckin__checkinLoading.visibility = View.GONE
                         window?.clearFlags(
-                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                        );
                         Log.d("CheckinActivity", ">>> onFailure <<< : $t")
                     }
 
@@ -167,12 +169,23 @@ class CheckinActivity : AppCompatActivity(), SensorEventListener {
                     ) {
                         progressBarCheckin__checkinLoading.visibility = View.GONE
                         window?.clearFlags(
-                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE);
+                            WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE
+                        );
                         if (response.isSuccessful) {
                             val userData = response.body()?.data
                             when (userData?.userStatus) {
-                                "red", "black" -> tv_text.text = userData.reason
-                                "yellow", "green" -> tv_text.text = userData.userStatus
+                                "red", "black" -> {
+                                    tv_text.text = userData.reason
+
+                                    val imgDrawable = ContextCompat.getDrawable(this@CheckinActivity, resources.getIdentifier("not_ready", "drawable", packageName))
+                                    iv_status.setImageDrawable(imgDrawable)
+                                }
+                                "yellow", "green" -> {
+                                    tv_text.text = userData.userStatus
+
+                                    val imgDrawable = ContextCompat.getDrawable(this@CheckinActivity, resources.getIdentifier("ready", "drawable", packageName))
+                                    iv_status.setImageDrawable(imgDrawable)
+                                }
                             }
                         } else {
                             Toast.makeText(
