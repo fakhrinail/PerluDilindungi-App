@@ -1,5 +1,6 @@
 package com.tubes.gapedulidilindungi
 
+import android.graphics.Color
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -13,11 +14,20 @@ class FaskesAdapter(val results : ArrayList<BookmarkData>, val listener: FaskesA
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val currentItem = results[position]
-        holder.view.textViewFaskes__title.text = currentItem.namaFaskes
+        holder.view.textViewFaskes__title.text = "Faskes " + currentItem.namaFaskes
         holder.view.textViewFaskes__type.text = currentItem.jenisFaskes
+        if (currentItem.jenisFaskes == "PUSKESMAS") {
+            holder.view.textViewFaskes__type.setBackgroundColor(Color.parseColor("#5551FF"))
+        }
+        else if (currentItem.jenisFaskes == "KLINIK") {
+            holder.view.textViewFaskes__type.setBackgroundColor(Color.parseColor("#41A7F6"))
+        }
+        else {
+            holder.view.textViewFaskes__type.setBackgroundColor(Color.parseColor("#EF5DA8"))
+        }
         holder.view.textViewFaskes__address.text = currentItem.alamatFaskes
         holder.view.textViewFaskes__contact.text = currentItem.noTelpFaskes
-        holder.view.textViewFaskes__code.text = currentItem.kodeFaskes
+        holder.view.textViewFaskes__code.text = "KODE: " + currentItem.kodeFaskes
 
         holder.view.setOnClickListener {
             listener.onClick(results[position])
