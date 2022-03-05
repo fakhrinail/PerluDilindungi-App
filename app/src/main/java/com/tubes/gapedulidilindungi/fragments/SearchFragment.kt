@@ -1,5 +1,7 @@
 package com.tubes.gapedulidilindungi.fragments
 
+import android.Manifest
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
@@ -9,14 +11,21 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
+import androidx.core.app.ActivityCompat
+import com.google.android.gms.location.FusedLocationProviderClient
+import com.google.android.gms.location.LocationServices
 import com.tubes.gapedulidilindungi.models.FaskesModel
 import com.tubes.gapedulidilindungi.models.ProvinceCityModel
 import com.tubes.gapedulidilindungi.R
+import com.tubes.gapedulidilindungi.data.BookmarkData
+import com.tubes.gapedulidilindungi.data.ListBookmarkData
 import com.tubes.gapedulidilindungi.databinding.FragmentSearchBinding
+import com.tubes.gapedulidilindungi.models.FaskesResults
 import com.tubes.gapedulidilindungi.retrofit.ApiService
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.math.pow
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -35,6 +44,12 @@ class SearchFragment : Fragment() {
 
     private var selectedProvince: String? = null
     private var selectedCity: String? = null
+    private var top5Faskes: List<BookmarkData>? = null
+    private var nearestFaskes: ListBookmarkData? = null
+
+    private var lastLatitude: Double? = null
+    private var lastLongitude: Double? = null
+    private lateinit var fusedLocationClient: FusedLocationProviderClient
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -52,17 +67,26 @@ class SearchFragment : Fragment() {
         // Inflate the layout for this fragment
         _binding = FragmentSearchBinding.inflate(inflater, container, false)
 
-        binding.dropdownProvince.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
-                val provinceId = parent?.getItemAtPosition(pos).toString()
-                getCitiesDataFromApi(provinceId)
-                selectedProvince = provinceId
-            }
+        fusedLocationClient = LocationServices.getFusedLocationProviderClient(requireContext())
+        getLastKnownLocation()
 
-            override fun onNothingSelected(p0: AdapterView<*>?) {
-                TODO("Not yet implemented")
+        binding.dropdownProvince.onItemSelectedListener =
+            object : AdapterView.OnItemSelectedListener {
+                override fun onItemSelected(
+                    parent: AdapterView<*>?,
+                    view: View?,
+                    pos: Int,
+                    id: Long
+                ) {
+                    val provinceId = parent?.getItemAtPosition(pos).toString()
+                    getCitiesDataFromApi(provinceId)
+                    selectedProvince = provinceId
+                }
+
+                override fun onNothingSelected(p0: AdapterView<*>?) {
+                    TODO("Not yet implemented")
+                }
             }
-        }
 
         binding.dropdownCity.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, pos: Int, id: Long) {
@@ -79,7 +103,8 @@ class SearchFragment : Fragment() {
             if (selectedProvince != null && selectedCity != null) {
                 getFacilitiesDataFromApi(selectedProvince!!, selectedCity!!)
             } else {
-                Toast.makeText(requireContext(), "Select province and city", Toast.LENGTH_SHORT).show()
+                Toast.makeText(requireContext(), "Select province and city", Toast.LENGTH_SHORT)
+                    .show()
             }
         }
 
@@ -179,9 +204,53 @@ class SearchFragment : Fragment() {
                     ) {
                         binding.progressBarSearchSearchLoading.visibility = View.GONE
                         if (response.isSuccessful) {
-                            Log.d("SearchFragment", response.body().toString())
-                            // TODO : Integrate with list of facilities fragment
+                            Log.d("FaskesResults", response.body().toString())
+                            val sortedListFaskes =
+                                sortFaskes(response.body()?.data, lastLongitude, lastLatitude)
+
+                            Log.d("ListFaskes", sortedListFaskes.toString())
+
+                            val listFaskes = sortedListFaskes?.map {
+                                BookmarkData(
+                                    id = it.id!!,
+                                    kodeFaskes = it.kode.toString(),
+                                    namaFaskes = it.nama,
+                                    alamatFaskes = it.alamat,
+                                    noTelpFaskes = it.telp,
+                                    jenisFaskes = it.jenisFaskes,
+                                    statusFaskes = it.status
+                                )
+                            }
+
+                            Log.d("ListFaskes", listFaskes?.size.toString())
+
+                            if (listFaskes != null) {
+                                top5Faskes = listFaskes.slice(0..4)
+
+                                val bundle = Bundle()
+                                val listFaskesFragment = BookmarkFragment()
+                                val listFaskes =
+                                    top5Faskes?.let { it1 -> ListBookmarkData(listFaskes = it1) }
+                                Log.d("LIST_FASKES", listFaskes.toString())
+                                bundle.putParcelable(
+                                    "LIST_FASKES",
+                                    listFaskes
+                                )
+                                listFaskesFragment.arguments = bundle
+                                val fragment = childFragmentManager.findFragmentById(R.id.fragment_container_2)
+                                if (fragment != null) {
+                                    childFragmentManager.beginTransaction().remove(fragment).commit()
+                                }
+                                childFragmentManager.beginTransaction().apply {
+                                    add(R.id.fragment_container_2, listFaskesFragment)
+                                    commit()
+                                }
+                            }
+
+                            Log.d("ListFaskes", nearestFaskes?.listFaskes.toString())
+                            Log.d("ListFaskes", nearestFaskes.toString())
                         } else {
+                            Log.d("FaskesResults", response.body().toString())
                             Toast.makeText(
                                 requireContext(),
                                 "Unable to get facilities",
@@ -191,6 +260,47 @@ class SearchFragment : Fragment() {
                     }
                 })
         }
+    }
+
+    private fun getLastKnownLocation() {
+        if (ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_FINE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
+                requireContext(),
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            ) != PackageManager.PERMISSION_GRANTED
+        ) {
+            Toast.makeText(requireContext(), "Permission not granted", Toast.LENGTH_SHORT)
+                .show()
+            return
+        } else {
+            Log.d("Location", "Permission granted")
+            fusedLocationClient.lastLocation
+                .addOnSuccessListener { location ->
+                    if (location != null) {
+                        lastLatitude = location.latitude
+                        lastLongitude = location.longitude
+                    }
+                }
+        }
+    }
+
+    private fun sortFaskes(
+        listFaskes: List<FaskesResults>?,
+        longitude: Double?,
+        latitude: Double?
+    ): List<FaskesResults>? {
+        val mutableListFaskes = listFaskes?.toMutableList()
+        val currLongitude = longitude ?: 0.0
+        val currLatitude = latitude ?: 0.0
+
+        mutableListFaskes?.sortBy { it ->
+            ((it.longitude?.toDouble()?.minus(currLongitude))?.pow(2)
+                ?.plus((it.latitude?.toDouble()?.minus(currLatitude))?.pow(2)!!))?.pow(0.5)
+        }
+
+        return mutableListFaskes?.toList()
     }
 
     companion object {

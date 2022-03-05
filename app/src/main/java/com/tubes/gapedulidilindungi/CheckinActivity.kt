@@ -36,8 +36,6 @@ class CheckinActivity : AppCompatActivity(), SensorEventListener {
     private var lastLongitude: Double? = null
     private var temperatureSensor: Sensor? = null
 
-    private var hasTemperatureSensor: Boolean = false
-
     @SuppressLint("SetTextI18n")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

@@ -12,7 +12,6 @@
         android:layout_height="0dp"
         app:layout_constraintBottom_toTopOf="@+id/bottomNavbar"
         app:layout_constraintTop_toTopOf="parent">
-
     </FrameLayout>
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
