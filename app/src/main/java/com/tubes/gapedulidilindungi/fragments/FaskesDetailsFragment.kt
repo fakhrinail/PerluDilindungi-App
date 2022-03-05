@@ -1,6 +1,7 @@
 package com.tubes.gapedulidilindungi.fragments
 
 import android.content.Intent
+import android.graphics.Color
 import android.net.Uri
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.tubes.gapedulidilindungi.R
 import com.tubes.gapedulidilindungi.data.BookmarkData
 import com.tubes.gapedulidilindungi.data.BookmarkViewModel
+import kotlinx.android.synthetic.main.adapter_faskes.view.*
 import kotlinx.android.synthetic.main.fragment_faskes_details.view.*
 
 class FaskesDetailsFragment : Fragment() {
@@ -40,12 +42,22 @@ class FaskesDetailsFragment : Fragment() {
         val alamat = arguments?.getString("alamat_faskes")
         val notelp = arguments?.getString("notelp_faskes")
         val status = arguments?.getString("status_faskes")
-        view.textViewFaskes__titledetail.setText(nama)
+        view.textViewFaskes__titledetail.setText("Faskes " + nama)
         view.textViewFaskes__kodedetail.setText("Kode: " + kode)
         view.textViewFaskes__jenisdetail.setText(jenis)
         view.textViewFaskes__alamatdetail.setText(alamat)
         view.textViewFaskes__notelpdetail.setText(notelp)
         view.textViewFaskes__statusdesc.setText(status)
+        if (jenis == "PUSKESMAS") {
+            view.textViewFaskes__jenisdetail.setBackgroundColor(Color.parseColor("#5551FF"))
+        }
+        else if (jenis == "KLINIK") {
+            view.textViewFaskes__jenisdetail.setBackgroundColor(Color.parseColor("#41A7F6"))
+        }
+        else {
+            view.textViewFaskes__jenisdetail.setBackgroundColor(Color.parseColor("#EF5DA8"))
+        }
+
         if (status == "Siap Vaksinasi") {
             view.imageViewFaskes__statusimage.setImageResource(R.drawable.ready)
         }
@@ -71,6 +83,7 @@ class FaskesDetailsFragment : Fragment() {
         mBookmarkViewModel.readAllData.observe(viewLifecycleOwner, Observer { bookmark ->
             if (bookmark.any{ b -> b.id == id }) {
                 view.button__bookmark.setText("- Unbookmark")
+                view.button__bookmark.setBackgroundColor(Color.parseColor("#EF5DA8"))
                 view.button__bookmark.setOnClickListener {
                     mBookmarkViewModel.deleteBookmark(id!!)
                     view.button__bookmark.setText("+ Bookmark")
@@ -78,6 +91,7 @@ class FaskesDetailsFragment : Fragment() {
             }
             else {
                 view.button__bookmark.setText("+ Bookmark")
+                view.button__bookmark.setBackgroundColor(Color.parseColor("#41A7F6"))
                 view.button__bookmark.setOnClickListener {
                     val bookmark = BookmarkData(
                         id!!,
